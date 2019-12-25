@@ -6,7 +6,7 @@ package com.github.wycm.http2;
 public class DynamicStaticTable {
     private StaticTable staticTable = new StaticTable();
 
-    private DynamicTable dynamicTable = new DynamicTable();
+    private FifoDynamicTable dynamicTable = new FifoDynamicTable();
 
     /**
      * Get exact match index
@@ -20,12 +20,9 @@ public class DynamicStaticTable {
                 return i + 1;
             }
         }
-
-        for (int i = 0; i < dynamicTable.getDynamicHeaderList().size(); i++) {
-            Header dynamicHeader = dynamicTable.getDynamicHeaderList().get(i);
-            if (dynamicHeader.getName().equals(header.getName()) && dynamicHeader.getValue().equals(header.getValue())) {
-                return staticTable.gethPackHeaderList().size() + i + 1;
-            }
+        int dynamicTableIndex = dynamicTable.getExactMatchIndex(header);
+        if (dynamicTableIndex != -1) {
+            return staticTable.gethPackHeaderList().size() + dynamicTableIndex + 1;
         }
         return -1;
     }
@@ -38,16 +35,14 @@ public class DynamicStaticTable {
     public int getNameMatchIndex(Header header) {
         for (int i = 0; i < staticTable.gethPackHeaderList().size(); i++) {
             Header staticHeader = staticTable.gethPackHeaderList().get(i);
-            if (staticHeader.getName().equals(header.getValue())) {
+            if (staticHeader.getName().equals(header.getName())) {
                 return i + 1;
             }
         }
 
-        for (int i = 0; i < dynamicTable.getDynamicHeaderList().size(); i++) {
-            Header dynamicHeader = dynamicTable.getDynamicHeaderList().get(i);
-            if (dynamicHeader.getName().equals(header.getName())) {
-                return staticTable.gethPackHeaderList().size() + i + 1;
-            }
+        int dynamicTableIndex = dynamicTable.getNameMatchIndex(header);
+        if (dynamicTableIndex != -1) {
+            return staticTable.gethPackHeaderList().size() + dynamicTableIndex + 1;
         }
         return -1;
     }
@@ -62,7 +57,7 @@ public class DynamicStaticTable {
     }
 
     public void addHeader(Header header) {
-        dynamicTable.getDynamicHeaderList().add(header);
+        dynamicTable.addHeader(header);
     }
 
 }

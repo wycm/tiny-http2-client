@@ -29,7 +29,7 @@ public class Frame {
         bytes[3] = type;
         bytes[4] = flags;
 
-        System.arraycopy(new byte[4], 0, bytes, 5, 4);
+        System.arraycopy(ByteUtils.intToByteArray(reserved | streamId), 0, bytes, 5, 4);
 
         return bytes;
     }

@@ -26,4 +26,19 @@ public class ByteUtils {
         return result;
     }
 
+    /**
+     *
+     * Hex string to byte array
+     * @param hexString eg:41 88 aa 69 d2 9a c4 b9 ec 9b
+     * @return
+     */
+    public static byte[] hexStringToByteArray(String hexString) {
+        String[] strings = hexString.split(" ");
+        byte[] result = new byte[strings.length];
+        for (int i = 0; i < strings.length; i++) {
+            result[i] = (byte)((int)Integer.valueOf(strings[i], 16));
+        }
+        return result;
+    }
+
 }
