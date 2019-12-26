@@ -26,6 +26,8 @@ public class ByteUtils {
         return result;
     }
 
+
+
     /**
      *
      * Hex string to byte array

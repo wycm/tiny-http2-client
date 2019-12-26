@@ -1,14 +1,17 @@
-package com.github.wycm.http2;
+package com.github.wycm.http2.frame;
+
+import com.github.wycm.http2.ByteArrayBuffer;
+import com.github.wycm.http2.ByteUtils;
+import com.github.wycm.http2.ConnectionContext;
+import com.github.wycm.http2.Header;
 
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Headers Stream
+ * Headers frame
  */
-public class Headers {
-    private Frame frame = new Frame();
-
+public class Headers extends Frame{
     /**
      * The following properties default to true
      */
@@ -33,8 +36,8 @@ public class Headers {
     private void init() {
         setPadded(false);
         setPriority(false);
-        frame.setStreamId(connectionContext.generateStreamId());
-        frame.setType((byte) 1);
+        setStreamId(connectionContext.generateStreamId());
+        setType((byte) 1);
     }
 
     private List<Header> headerList = new LinkedList<>();
@@ -45,15 +48,19 @@ public class Headers {
         byte[][] t = new byte[headerList.size()][];
         int i = 0;
         for (Header header : headerList) {
-            t[i++] = connectionContext.getHeaderEncoder().encode(header);
+            t[i++] = connectionContext.getReqHeaderEncoder().encode(header);
         }
         headersBytes = ByteUtils.combine(t);
-        frame.setLength(headersBytes.length);
+        super.setLength(headersBytes.length);
 
-        frame.setFlags((byte) (endStreams | endHeaders | padded | priority | unused));
-        return ByteUtils.combine(frame.getBytes(), headersBytes);
+        super.setFlags((byte) (endStreams | endHeaders | padded | priority | unused));
+        return ByteUtils.combine(super.getBytes(), headersBytes);
     }
 
+    @Override
+    public void decode(ByteArrayBuffer byteArrayBuffer) {
+        System.out.println("The Headers Frame is to be decoded");
+    }
 
 
     public void addHeader(Header header) {

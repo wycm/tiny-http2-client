@@ -4,12 +4,18 @@ package com.github.wycm.http2;
  * Created by wycm on 2019-12-25.
  */
 public class ConnectionContext {
-    private HeaderEncoder headerEncoder;
+
+    private HeaderEncoder reqHeaderEncoder;
+
+    private HeaderEncoder resHeaderEncoder;
+
+
 
     private int currentStreamId = 0;
 
-    public ConnectionContext(HeaderEncoder headerEncoder) {
-        this.headerEncoder = headerEncoder;
+    public ConnectionContext() {
+        this.reqHeaderEncoder = new HeaderEncoder(true, new DynamicStaticTable());
+        this.resHeaderEncoder = new HeaderEncoder(true, new DynamicStaticTable());
     }
 
     public int generateStreamId() {
@@ -21,12 +27,12 @@ public class ConnectionContext {
         return currentStreamId;
     }
 
-    public HeaderEncoder getHeaderEncoder() {
-        return headerEncoder;
+    public HeaderEncoder getReqHeaderEncoder() {
+        return reqHeaderEncoder;
     }
 
-    public void setHeaderEncoder(HeaderEncoder headerEncoder) {
-        this.headerEncoder = headerEncoder;
+    public void setReqHeaderEncoder(HeaderEncoder reqHeaderEncoder) {
+        this.reqHeaderEncoder = reqHeaderEncoder;
     }
 
     public int getCurrentStreamId() {
@@ -35,5 +41,14 @@ public class ConnectionContext {
 
     public void setCurrentStreamId(int currentStreamId) {
         this.currentStreamId = currentStreamId;
+    }
+
+
+    public HeaderEncoder getResHeaderEncoder() {
+        return resHeaderEncoder;
+    }
+
+    public void setResHeaderEncoder(HeaderEncoder resHeaderEncoder) {
+        this.resHeaderEncoder = resHeaderEncoder;
     }
 }

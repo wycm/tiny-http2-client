@@ -1,9 +1,12 @@
-package com.github.wycm.http2;
+package com.github.wycm.http2.frame;
+
+import com.github.wycm.http2.ByteArrayBuffer;
+import com.github.wycm.http2.ByteUtils;
 
 /**
  * Created by wycm on 2019-12-19.
  */
-public class Frame {
+public abstract class Frame {
     // 3bytes
     private int length;
 
@@ -28,7 +31,6 @@ public class Frame {
         System.arraycopy(lengthBytes, 1, bytes, 0, 3);
         bytes[3] = type;
         bytes[4] = flags;
-
         System.arraycopy(ByteUtils.intToByteArray(reserved | streamId), 0, bytes, 5, 4);
 
         return bytes;
@@ -73,4 +75,6 @@ public class Frame {
     public void setStreamId(int streamId) {
         this.streamId = streamId;
     }
+
+    public abstract void decode(ByteArrayBuffer byteArrayBuffer);
 }

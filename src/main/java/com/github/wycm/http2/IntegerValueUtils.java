@@ -2,8 +2,8 @@ package com.github.wycm.http2;
 
 /**
  * Integer value codec tool
- * todo
- * https://http2.github.io/http2-spec/compression.html#integer.representation.example3 这个case还未考虑
+ * https://http2.github.io/http2-spec/compression.html#integer.representation.example3
+ * The case has not been considered
  */
 public class IntegerValueUtils {
 
