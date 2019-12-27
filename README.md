@@ -7,12 +7,10 @@ tiny-http2-client
 ## Example
 * `com.github.wycm.http2.example`
 
-
-
 ## Todo
 
 * [x] HPACK: Header Compression
 * [x] Request data encoding
 * [x] Simple get request  
-* [] Response data decoding
-* [] Supports TLS
+* [ ] Response data decoding
+* [ ] Supports TLS
