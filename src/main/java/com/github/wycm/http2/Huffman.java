@@ -339,8 +339,48 @@ public class Huffman {
         System.arraycopy(encodes, 0, result, 0, newLen);
         return result;
     }
+
     //todo
     public final static String decode(byte[] bytes) {
-        return null;
+        ByteArrayBuffer originalBytes = new ByteArrayBuffer();
+        int pos = 0;
+        int posIndex = 0;
+        for (int i = 0;i < bytes.length; i++) {
+            int original = 0;
+            for (int j = 0; j < CODES.length; j++) {
+                int code = CODES[j];
+                int len = LENGTHS[j];
+                int tPos = i;
+                int tPosIndex = posIndex;
+                while (len != 0 && tPos < bytes.length) {
+                    int t = (8 - tPosIndex) > len ? len : (8 - tPosIndex);
+
+                    boolean leftMove = (8 - posIndex) > len;
+                    byte tv = 0;
+                    if (leftMove) {
+                        tv = (byte) (bytes[tPos] << (8 - posIndex - len));
+                    } else {
+                        tv = (byte) (bytes[tPos] >>> (len - t));
+                    }
+                    original =  (tv << (len - t)) | tv;
+                    len = len - t;
+                    tPosIndex += t;
+                    tPos += tPosIndex / 8;
+                    tPosIndex = tPosIndex % 8;
+                }
+                if (original == code) {
+                    pos += LENGTHS[j] / 8;
+                    posIndex += LENGTHS[j] % 8;
+                    originalBytes.append(new byte[]{(byte) j});
+                    i = tPos;
+                    break;
+                }
+                //End
+                break;
+            }
+
+        }
+
+        return new String(originalBytes.readAllBytes());
     }
 }
