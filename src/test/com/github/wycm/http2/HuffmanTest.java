@@ -22,5 +22,9 @@ public class HuffmanTest {
     @Test
     public void decode() {
         Assert.assertEquals(authority, Huffman.decode(ByteUtils.hexStringToByteArray(hexString)));
+        Assert.assertEquals("302", Huffman.decode(ByteUtils.hexStringToByteArray("64 02")));
+        Assert.assertEquals("private", Huffman.decode(ByteUtils.hexStringToByteArray("ae c3 77 1a 4b")));
+        Assert.assertEquals("Mon, 21 Oct 2013 20:13:21 GMT", Huffman.decode(ByteUtils.hexStringToByteArray("d0 7a be 94 10 54 d4 44 a8 20 05 95 04 0b 81 66 e0 82 a6 2d 1b ff")));
+        Assert.assertEquals("https://www.example.com", Huffman.decode(ByteUtils.hexStringToByteArray("9d 29 ad 17 18 63 c7 8f 0b 97 c8 e9 ae 82 ae 43 d3")));
     }
 }

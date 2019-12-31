@@ -10,7 +10,9 @@ tiny-http2-client
 ## Todo
 
 * [x] HPACK: Header Compression
+    * [x] Huffman encoded
+    * [x] Huffman decoded
 * [x] Request data encoding
 * [x] Simple get request  
-* [ ] Response data decoding
+* [x] Response data decoding
 * [ ] Supports TLS

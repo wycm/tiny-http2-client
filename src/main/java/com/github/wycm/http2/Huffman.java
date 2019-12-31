@@ -340,45 +340,49 @@ public class Huffman {
         return result;
     }
 
-    //todo
+
     public final static String decode(byte[] bytes) {
         ByteArrayBuffer originalBytes = new ByteArrayBuffer();
-        int pos = 0;
         int posIndex = 0;
-        for (int i = 0;i < bytes.length; i++) {
+        int i = 0;
+        while (i < bytes.length) {
             int original = 0;
+            int len = 0;
             for (int j = 0; j < CODES.length; j++) {
                 int code = CODES[j];
-                int len = LENGTHS[j];
+                len = LENGTHS[j];
                 int tPos = i;
                 int tPosIndex = posIndex;
+                original = 0;
                 while (len != 0 && tPos < bytes.length) {
                     int t = (8 - tPosIndex) > len ? len : (8 - tPosIndex);
-
-                    boolean leftMove = (8 - posIndex) > len;
-                    byte tv = 0;
+                    boolean leftMove = len >= (8 - tPosIndex);
                     if (leftMove) {
-                        tv = (byte) (bytes[tPos] << (8 - posIndex - len));
+                        original = original + ((bytes[tPos] & 0xff) << (24 + tPosIndex) >>> (24 + tPosIndex) << (len - 8 + tPosIndex));
                     } else {
-                        tv = (byte) (bytes[tPos] >>> (len - t));
+                        original = original + ((bytes[tPos] & 0xff) << (24 + tPosIndex) >>> (24 + tPosIndex) >>> (8 - t - tPosIndex));
                     }
-                    original =  (tv << (len - t)) | tv;
                     len = len - t;
                     tPosIndex += t;
                     tPos += tPosIndex / 8;
                     tPosIndex = tPosIndex % 8;
                 }
-                if (original == code) {
-                    pos += LENGTHS[j] / 8;
-                    posIndex += LENGTHS[j] % 8;
+
+                if (original == code ) {
+                    if (len != 0) {
+                        int t = original >>> len;
+                        if ((t & 0x3fffffff) == t) {
+                            //EOS
+                            return new String(originalBytes.readAllBytes());
+                        }
+
+                    }
+                    posIndex = (posIndex + LENGTHS[j]) % 8;
                     originalBytes.append(new byte[]{(byte) j});
                     i = tPos;
                     break;
                 }
-                //End
-                break;
             }
-
         }
 
         return new String(originalBytes.readAllBytes());
