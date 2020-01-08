@@ -27,6 +27,9 @@ public class Headers extends Frame{
 
     private ConnectionContext connectionContext;
 
+    private List<Header> headerList = new LinkedList<>();
+
+
 
     public Headers(ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
@@ -39,9 +42,6 @@ public class Headers extends Frame{
         setStreamId(connectionContext.generateStreamId());
         setType((byte) 1);
     }
-
-    private List<Header> headerList = new LinkedList<>();
-
 
     public byte[] getBytes() {
         byte[] headersBytes;
@@ -60,6 +60,7 @@ public class Headers extends Frame{
     @Override
     public void decode(ByteArrayBuffer byteArrayBuffer) {
         System.out.println("The Headers Frame is to be decoded");
+        //todo
     }
 
 

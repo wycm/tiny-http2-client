@@ -12,7 +12,9 @@ tiny-http2-client
 * [x] HPACK: Header Compression
     * [x] Huffman encoded
     * [x] Huffman decoded
-* [x] Request data encoding
+* [x] Request header data encoding
 * [x] Simple get request  
 * [x] Response data decoding
+* [ ] Response header decoding
+* [ ] Multiplexed
 * [ ] Supports TLS

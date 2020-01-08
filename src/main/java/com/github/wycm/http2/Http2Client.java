@@ -13,6 +13,12 @@ import java.net.Socket;
 public class Http2Client {
     private ConnectionContext connectionContext = new ConnectionContext();
 
+    private volatile Socket socket;
+
+    private DataInputStream in;
+
+    private DataOutputStream out;
+
     public Http2Client() {
 
     }
@@ -23,10 +29,10 @@ public class Http2Client {
         int i = sub.indexOf("/");
         String domain = sub.substring(0, i);
         String path = sub.substring(i);
-        Socket socket = new Socket(domain, 80);
+        socket = new Socket(domain, 80);
         socket.setSoTimeout(10 * 1000);
-        DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-        DataInputStream in = new DataInputStream(socket.getInputStream());
+        out = new DataOutputStream(socket.getOutputStream());
+        in = new DataInputStream(socket.getInputStream());
         // HTTP2 Magic
         out.write(new Magic().getBytes());
         out.flush();
@@ -56,6 +62,8 @@ public class Http2Client {
                 if (frame instanceof Data) {
                     response = ((Data) frame).getResponseStr();
                     return response;
+                } else if (frame instanceof Headers) {
+                    //todo
                 }
                 int frameLen = byteArrayBuffer.readInt(3) + Constants.FRAME_PREFIX_LEN;
                 byte[] untreatedBytes = byteArrayBuffer.readBytesByPos(frameLen);
@@ -63,10 +71,13 @@ public class Http2Client {
                 byteArrayBuffer.append(untreatedBytes);
             }
         }
+        return response;
+    }
+
+    public void close() throws IOException {
         out.close();
         in.close();
         socket.close();
-        return response;
     }
 
     private Frame decode(ByteArrayBuffer frameBytes) {
