@@ -10,7 +10,7 @@ public class IntegerValueUtils {
     /**
      *
      * @param value
-     * @param N The prefix size, N, is always between 1 and 8 bits
+     * @param N The prefix size, N is always between 1 and 8 bits
      * @return
      */
     public static byte[] encode(int value, int N, int flag) {

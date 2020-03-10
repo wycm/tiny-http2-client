@@ -7,8 +7,14 @@ import java.util.List;
  */
 public class HeaderDecoder {
 
+    private DynamicStaticTable dynamicStaticTable;
+
+    public HeaderDecoder(DynamicStaticTable dynamicStaticTable) {
+        this.dynamicStaticTable = dynamicStaticTable;
+    }
 
     public List<Header> decode(ByteArrayBuffer byteArrayBuffer) {
+        //todo
         return null;
     }
 }
